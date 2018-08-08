@@ -30,8 +30,17 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String acronym(String phrase) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		
+		String tla = "";
+		if (Character.isAlphabetic(phrase.charAt(0)))
+				tla = tla + Character.toUpperCase( phrase.charAt(0));
+		
+		for(int i = 1;i<phrase.length();i++)
+		{	//Conditions check if it the current letter is the first letter after a space(s)
+			if (!Character.isAlphabetic(phrase.charAt(i-1)) &&Character.isAlphabetic(phrase.charAt(i)))
+				tla = tla + Character.toUpperCase( phrase.charAt(i));
+		}
+		return tla;
 	}
 
 	/**
@@ -84,18 +93,38 @@ public class EvaluationService {
 		}
 
 		public boolean isEquilateral() {
-			// TODO Write an implementation for this method declaration
-			return false;
+
+			if (this.numEqSides() == 3)
+				return true;
+			else
+				return false;
 		}
 
 		public boolean isIsosceles() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			if (this.numEqSides()!=0)
+				return true;
+			else
+				return false;
 		}
 
 		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			if (numEqSides()==0)
+				return true;
+			else
+				return false;
+		}
+		//Added function to reduce redundancy, returns # of pairs of equal size
+		public int numEqSides() {
+			int num = 0;
+			if (sideOne == sideTwo)
+				num++;
+			if (sideOne == sideThree)
+				num++;
+			if (sideTwo == sideThree)
+				num++;
+			return num;
+			//2 pairs are the same as 3 pairs being equal due to transitivity
+			//Consequently this will only return 0,1,or 3
 		}
 
 	}
@@ -116,8 +145,23 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		string = string.toUpperCase();
+		int length = string.length();
+		int score = 0;
+		int[][] scoreMatrix = {{10,1},{14,1},{18,1},{24,1},{30,1},{21,1},{23,1},{27,1},{28,1},
+				{29,1},{13,2},{16,2},{11,3},{12,3},{22,3},{25,3},{15,4},{17,4},{31,4},
+				{32,4},{34,4},{20,5},{19,8},{33,8},{26,10},{35,10}};
+		//numerical value of each capital letter character paired with
+		//its proper scrabble pointage{letter,value}
+		for (int i = 0; i<length;i++) {
+			char currentChar = string.charAt(i);
+			for (int[] scorePair: scoreMatrix) {
+				if(scorePair[0] == Character.getNumericValue(currentChar)){
+					score = score + scorePair[1];
+				}
+			}
+		}
+		return score;
 	}
 
 	/**
@@ -152,8 +196,34 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		
+		char currentChar;
+		int lengthOfInput = string.length();
+		String cleaned = "";
+		boolean countryCode = true;
+		for (int i = 0;i<lengthOfInput;i++) {
+			currentChar = string.charAt(i);
+			if (Character.isDigit(currentChar)) {
+				if (countryCode && currentChar=='1') {
+					countryCode = false;
+					
+					//The first number was the country code and the flag for potential
+					//country code has been turned off
+				}
+				else
+				{
+					cleaned = cleaned + currentChar;
+					countryCode = false;
+					//If the first number wasn't 1, then there is no country code
+				}
+			}
+			else if (charAt(i)!= ' ' ||charAt(i)!='')
+		}
+		if (cleaned.length()>10) {
+			throw new IllegalArgumentException();
+		}
+		
+		return cleaned;
 	}
 
 	/**
