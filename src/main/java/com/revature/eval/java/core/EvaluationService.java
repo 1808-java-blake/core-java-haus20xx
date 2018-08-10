@@ -10,8 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 public class EvaluationService {
 
+	private static Logger log = Logger.getRootLogger();
 	/**
 	 * 1. Without using the StringBuilder or StringBuffer class, write a method that
 	 * reverses a String. Example: reverse("example"); -> "elpmaxe"
@@ -469,10 +472,34 @@ public class EvaluationService {
 		}
 
 		public String rotate(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			char[] letters = string.toCharArray();
+			char useForCycle;
+			String returnMe = "";
+			for (char letter: letters) {
+				if (Character.isUpperCase(letter)) {
+					//65-90
+					log.debug(letter + " is " + (int)letter);
+					useForCycle = letter;
+					useForCycle = (char)(useForCycle - 65);
+					useForCycle = (char)((useForCycle+key)%26);
+					useForCycle = (char)( useForCycle + 65);
+					letter = useForCycle;
+					log.debug("after " + letter);
+				}
+				else if (Character.isLowerCase(letter)) {
+					//97-122
+					log.debug(letter + " is " + (int)letter);
+					useForCycle = letter;
+					useForCycle = (char)(useForCycle - 97);
+					useForCycle = (char)((useForCycle+key)%26);
+					useForCycle = (char)( useForCycle + 97);
+					letter = useForCycle;
+					log.debug("after " + letter);
+				}
+				returnMe = returnMe + letter;
+			}
+			return returnMe;
 		}
-
 	}
 
 	/**
