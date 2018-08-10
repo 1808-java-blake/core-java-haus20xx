@@ -632,8 +632,50 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String decode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			Map<Character,Character> newMap = new TreeMap<>();
+			newMap.put('z','a');
+			newMap.put('y','b');
+			newMap.put('x','c');
+			newMap.put('w','d');
+			newMap.put('v','e');
+			newMap.put('u','f');
+			newMap.put('t','g');
+			newMap.put('s','h');
+			newMap.put('r','i');
+			newMap.put('q','j');
+			newMap.put('p','k');
+			newMap.put('o','l');
+			newMap.put('n','m');
+			newMap.put('m','n');
+			newMap.put('l','o');
+			newMap.put('k','p');
+			newMap.put('j','q');
+			newMap.put('i','r');
+			newMap.put('h','s');
+			newMap.put('g','t');
+			newMap.put('f','u');
+			newMap.put('e','v');
+			newMap.put('d','w');
+			newMap.put('c','x');
+			newMap.put('b','y');
+			newMap.put('a','z');
+			
+			char[] characters = string.toCharArray();
+			List<Character> letters = new ArrayList<>();
+			
+			for(char character: characters) {
+				if(Character.isLetter(character)) {
+					letters.add(newMap.get(character));
+				}
+				else if (Character.isDigit(character))
+					letters.add(character);
+			}
+			String toReturn = "";
+			for (Character letter: letters) {
+				toReturn = toReturn + letter;
+			}
+			
+			return toReturn;
 		}
 	}
 
