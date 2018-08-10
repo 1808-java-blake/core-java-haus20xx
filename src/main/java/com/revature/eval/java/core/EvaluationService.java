@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
@@ -428,12 +429,11 @@ public class EvaluationService {
 			
 		}
 		
-		if (factors.isEmpty()) {
-			factors.add(orig);
-		}
+//		if (factors.isEmpty()) {
+//			factors.add(orig);
+//		}
 		if (l>1)
 			factors.add(l);
-		
 		return factors;
 	}
 
@@ -515,8 +515,24 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int calculateNthPrime(int i) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		
+		if (i == 0)
+			throw new IllegalArgumentException();
+		int lastPrime = 1;
+		int numPrimes = 0;
+		int iteration = 1;
+		
+		while(numPrimes<i) {
+			if (calculatePrimeFactorsOf((long) iteration).size()==1) {
+				numPrimes++;
+				lastPrime = iteration;
+			}
+			iteration++;
+			
+		}
+		
+		
+		return lastPrime;
 	}
 
 	/**
@@ -552,8 +568,61 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String encode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			Map<Character,Character> newMap = new TreeMap<>();
+			newMap.put('a', 'z');
+			newMap.put('b', 'y');
+			newMap.put('c', 'x');
+			newMap.put('d', 'w');
+			newMap.put('e', 'v');
+			newMap.put('f', 'u');
+			newMap.put('g', 't');
+			newMap.put('h', 's');
+			newMap.put('i', 'r');
+			newMap.put('j', 'q');
+			newMap.put('k', 'p');
+			newMap.put('l', 'o');
+			newMap.put('m', 'n');
+			newMap.put('n', 'm');
+			newMap.put('o', 'l');
+			newMap.put('p', 'k');
+			newMap.put('q', 'j');
+			newMap.put('r', 'i');
+			newMap.put('s', 'h');
+			newMap.put('t', 'g');
+			newMap.put('u', 'f');
+			newMap.put('v', 'e');
+			newMap.put('w', 'd');
+			newMap.put('x', 'c');
+			newMap.put('y', 'b');
+			newMap.put('z', 'a');
+			string = string.toLowerCase();
+			char[] letters = string.toCharArray();
+			List<Character> newLetters = new ArrayList<>();
+			for (char letter:letters) {
+				if(Character.isLetterOrDigit(letter)){
+					if (Character.isLetter(letter))
+						newLetters.add(newMap.get(letter));
+					else
+						newLetters.add(letter);
+				}
+				
+				
+			}
+			string = "";
+			int isFifth = 0;
+			for (Character c:newLetters) {
+				if (isFifth == 5)
+				{
+					string = string + " " + c;
+					isFifth = 0;
+				}
+				else
+					string = string + c;
+				
+				isFifth++;
+			}
+			
+			return string;
 		}
 
 		/**
@@ -609,8 +678,20 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isPangram(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		ArrayList<Character> hasExisted = new ArrayList<>();
+		char[] characters = string.toCharArray();
+		for(char character:characters) {
+			if (Character.isLetter(character)==true) {
+				if (!hasExisted.contains(character)) {
+					hasExisted.add(character);
+				}
+			}
+				
+		}
+		if (hasExisted.size()>= 26)
+			return true;
+		else
+			return false;
 	}
 
 	/**
