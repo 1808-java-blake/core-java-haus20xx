@@ -1,6 +1,12 @@
 package com.revature.eval.java.core;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -217,7 +223,12 @@ public class EvaluationService {
 					//If the first number wasn't 1, then there is no country code
 				}
 			}
-			else if (charAt(i)!= ' ' ||charAt(i)!='')
+			else if ( !(string.charAt(i) == ' ' || string.charAt(i)=='+' ||
+					string.charAt(i)=='.' || string.charAt(i)=='('||
+					string.charAt(i)==')'|| string.charAt(i) =='-')){ 
+				//Want to check if character is NOT amongst approved "punctuation"
+				throw new IllegalArgumentException();
+			}
 		}
 		if (cleaned.length()>10) {
 			throw new IllegalArgumentException();
@@ -236,8 +247,18 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		Map<String, Integer> wc = new HashMap<String, Integer>();
+		String words[];
+			words = string.split("[\\W]{1,}");
+			
+			for(String word: words) {
+				if (wc.containsKey(word)) {
+					wc.put(word, wc.get(word)+1);
+				}
+				else
+					wc.put(word, 1);
+			}
+		return wc;
 	}
 
 	/**
@@ -275,12 +296,26 @@ public class EvaluationService {
 	 * binary search is a dichotomic divide and conquer search algorithm.
 	 * 
 	 */
-	static class BinarySearch<T> {
+	static class BinarySearch<T extends Comparable<T>> {
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
-			// TODO Write an implementation for this method declaration
-			return 0;
+			int lowIndex = 0;
+			int highIndex = sortedList.size();
+			int midIndex = (lowIndex+highIndex)/2;
+			
+			while(true) {
+				midIndex = (lowIndex+highIndex)/2;
+				if (t.equals(sortedList.get(midIndex))){
+					return midIndex;
+				}
+				else if (t.compareTo(sortedList.get(midIndex))<0) {
+					highIndex = midIndex - 1;
+				}
+				else {
+					lowIndex = midIndex + 1;
+				}
+			}
 		}
 
 		public BinarySearch(List<T> sortedList) {
@@ -316,8 +351,27 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String toPigLatin(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String original = string;
+		string = string.toUpperCase();
+		//String[] words = string.split("[\\W] {1,}");
+		String finalWords = "";
+		String toAdd = "ay";
+		int numMoved = 0;
+		char cur;
+		do {
+			cur = string.charAt(numMoved);
+			if (!(cur == 'A' || cur == 'E'|| cur == 'I' || cur == 'O' || cur == 'U')) {
+				numMoved++;
+			}
+			
+		}while(!(cur == 'A' || cur == 'E'|| cur == 'I' || cur == 'O' || cur == 'U'));
+		
+		if (numMoved != 0)
+			toAdd =  original.substring(0, numMoved) + toAdd;
+		original = original.substring(numMoved);
+		
+		finalWords = original + toAdd;
+		return finalWords;
 	}
 
 	/**
@@ -336,8 +390,18 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		String digits = ""+ input;
+		int armstrongCheck = 0;
+		int numDigits = digits.length();
+		char[] digs = digits.toCharArray();
+		for (char digit:digs) {
+			int numb = Character.getNumericValue(digit);
+			armstrongCheck = (int)armstrongCheck + (int)Math.pow(numb, numDigits);
+		}
+		if (input == armstrongCheck)
+			return true;
+		else
+			return false;
 	}
 
 	/**
@@ -351,8 +415,23 @@ public class EvaluationService {
 	 * @return
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		long orig = l;
+		List<Long> factors = new ArrayList<>();
+		for (long i = 2; i < l;i++) {
+			while (l%i == 0) {
+				factors.add(i);
+				l = l/i;
+			}
+			
+		}
+		
+		if (factors.isEmpty()) {
+			factors.add(orig);
+		}
+		if (l>1)
+			factors.add(l);
+		
+		return factors;
 	}
 
 	/**
@@ -516,8 +595,14 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Temporal getGigasecondDate(Temporal given) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		 //In case,time not included
+        if(given instanceof LocalDate) {
+            LocalDateTime time = LocalDateTime.of((LocalDate) given, LocalTime.MIN);
+            return time.plus(Duration.ofSeconds(1000000000l));
+        }
+        //if time is included
+        LocalDateTime time = LocalDateTime.from(given);
+        return time.plus(Duration.ofSeconds(1000000000l));
 	}
 
 	/**
